@@ -1,0 +1,15 @@
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\bin\Debug\net8.0\PRN232.LMS.Services.deps.json
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\bin\Debug\net8.0\PRN232.LMS.Services.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\bin\Debug\net8.0\PRN232.LMS.Services.pdb
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\bin\Debug\net8.0\PRN232.LMS.Repositories.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\bin\Debug\net8.0\PRN232.LMS.Repositories.pdb
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.csproj.AssemblyReference.cache
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.AssemblyInfoInputs.cache
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.AssemblyInfo.cs
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.csproj.CoreCompileInputs.cache
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.L.1922E645.Up2Date
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\refint\PRN232.LMS.Services.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\PRN232.LMS.Services.pdb
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Services\obj\Debug\net8.0\ref\PRN232.LMS.Services.dll

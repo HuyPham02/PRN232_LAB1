@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  lms-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: lms-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=LmsP@ssw0rd!
+    ports:
+      - "1433:1433"
+    volumes:
+      - lms-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "LmsP@ssw0rd!" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  lms-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lms-api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=lms-db;Database=LmsDb;User Id=sa;Password=LmsP@ssw0rd!;TrustServerCertificate=True
+    depends_on:
+      lms-db:
+        condition: service_healthy
+
+volumes:
+  lms-data:
