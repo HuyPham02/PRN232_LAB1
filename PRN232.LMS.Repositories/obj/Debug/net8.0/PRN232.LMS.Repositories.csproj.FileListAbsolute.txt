@@ -12,3 +12,4 @@ C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Repositories\obj\Debug\net8.0\re
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Repositories\obj\Debug\net8.0\PRN232.LMS.Repositories.pdb
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Repositories\obj\Debug\net8.0\PRN232.LMS.Repositories.genruntimeconfig.cache
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Repositories\obj\Debug\net8.0\ref\PRN232.LMS.Repositories.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.Repositories\obj\Debug\net8.0\PRN232.LMS.Repositories.sourcelink.json

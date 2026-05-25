@@ -148,6 +148,62 @@ public class CoursesController : ControllerBase
         return Ok(ApiResponse<object>.SuccessResponse(new { }, "Course deleted successfully"));
     }
 
+    /// <summary>
+    /// Get enrollments for a specific course with search, sort, paging, field selection, and expansion
+    /// </summary>
+    [HttpGet("{id}/enrollments")]
+    [ProducesResponseType(typeof(ApiResponse<PagedResponse<EnrollmentResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetEnrollments(int id,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sort = null,
+        [FromQuery] int page = 1,
+        [FromQuery] int size = 10,
+        [FromQuery] string? fields = null,
+        [FromQuery] string? expand = null)
+    {
+        var query = new QueryParameters
+        {
+            Search = search, Sort = sort, Page = page, Size = size,
+            Fields = fields, Expand = expand
+        };
+
+        var result = await _courseService.GetEnrollmentsByCourseIdAsync(id, query);
+        if (result == null)
+            return NotFound(ApiResponse<object>.ErrorResponse("Course not found"));
+
+        var responseItems = result.Items.Select(MapEnrollmentToResponse).ToList();
+
+        if (!string.IsNullOrWhiteSpace(fields))
+        {
+            var selectedFields = fields.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(f => f.Trim().ToLower()).ToHashSet();
+
+            var filteredItems = responseItems.Select(item => SelectEnrollmentFields(item, selectedFields)).ToList();
+            var filteredResult = new
+            {
+                items = filteredItems,
+                pagination = new PaginationResponse
+                {
+                    Page = result.Pagination.Page, PageSize = result.Pagination.PageSize,
+                    TotalItems = result.Pagination.TotalItems, TotalPages = result.Pagination.TotalPages
+                }
+            };
+            return Ok(ApiResponse<object>.SuccessResponse(filteredResult));
+        }
+
+        var pagedResponse = new PagedResponse<EnrollmentResponse>
+        {
+            Items = responseItems,
+            Pagination = new PaginationResponse
+            {
+                Page = result.Pagination.Page, PageSize = result.Pagination.PageSize,
+                TotalItems = result.Pagination.TotalItems, TotalPages = result.Pagination.TotalPages
+            }
+        };
+        return Ok(ApiResponse<PagedResponse<EnrollmentResponse>>.SuccessResponse(pagedResponse));
+    }
+
     private static CourseResponse MapToResponse(CourseModel model)
     {
         return new CourseResponse
@@ -193,6 +249,52 @@ public class CoursesController : ControllerBase
         if (fields.Contains("semester")) dict["semester"] = item.Semester;
         if (fields.Contains("subject")) dict["subject"] = item.Subject;
         if (fields.Contains("enrollments")) dict["enrollments"] = item.Enrollments;
+        return dict;
+    }
+
+    private static EnrollmentResponse MapEnrollmentToResponse(EnrollmentModel model)
+    {
+        return new EnrollmentResponse
+        {
+            EnrollmentId = model.EnrollmentId,
+            StudentId = model.StudentId,
+            CourseId = model.CourseId,
+            EnrollDate = model.EnrollDate,
+            Status = model.Status,
+            Student = model.Student != null ? new StudentResponse
+            {
+                StudentId = model.Student.StudentId,
+                FullName = model.Student.FullName,
+                Email = model.Student.Email,
+                DateOfBirth = model.Student.DateOfBirth
+            } : null,
+            Course = model.Course != null ? new CourseResponse
+            {
+                CourseId = model.Course.CourseId,
+                CourseName = model.Course.CourseName,
+                SemesterId = model.Course.SemesterId,
+                SubjectId = model.Course.SubjectId,
+                Semester = model.Course.Semester != null ? new SemesterResponse
+                {
+                    SemesterId = model.Course.Semester.SemesterId,
+                    SemesterName = model.Course.Semester.SemesterName,
+                    StartDate = model.Course.Semester.StartDate,
+                    EndDate = model.Course.Semester.EndDate
+                } : null
+            } : null
+        };
+    }
+
+    private static Dictionary<string, object?> SelectEnrollmentFields(EnrollmentResponse item, HashSet<string> fields)
+    {
+        var dict = new Dictionary<string, object?>();
+        if (fields.Contains("enrollmentid")) dict["enrollmentId"] = item.EnrollmentId;
+        if (fields.Contains("studentid")) dict["studentId"] = item.StudentId;
+        if (fields.Contains("courseid")) dict["courseId"] = item.CourseId;
+        if (fields.Contains("enrolldate")) dict["enrollDate"] = item.EnrollDate;
+        if (fields.Contains("status")) dict["status"] = item.Status;
+        if (fields.Contains("student")) dict["student"] = item.Student;
+        if (fields.Contains("course")) dict["course"] = item.Course;
         return dict;
     }
 }

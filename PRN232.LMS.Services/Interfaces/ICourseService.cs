@@ -9,4 +9,5 @@ public interface ICourseService
     Task<CourseModel> CreateAsync(CourseModel model);
     Task<CourseModel?> UpdateAsync(int id, CourseModel model);
     Task<bool> DeleteAsync(int id);
+    Task<PagedResult<EnrollmentModel>?> GetEnrollmentsByCourseIdAsync(int courseId, QueryParameters query);
 }

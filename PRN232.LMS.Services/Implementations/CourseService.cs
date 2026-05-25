@@ -9,10 +9,12 @@ namespace PRN232.LMS.Services.Implementations;
 public class CourseService : ICourseService
 {
     private readonly IGenericRepository<Course> _repository;
+    private readonly IGenericRepository<Enrollment> _enrollmentRepository;
 
-    public CourseService(IGenericRepository<Course> repository)
+    public CourseService(IGenericRepository<Course> repository, IGenericRepository<Enrollment> enrollmentRepository)
     {
         _repository = repository;
+        _enrollmentRepository = enrollmentRepository;
     }
 
     public async Task<CourseModel?> GetByIdAsync(int id)
@@ -96,6 +98,124 @@ public class CourseService : ICourseService
         if (entity == null) return false;
         await _repository.DeleteAsync(entity);
         return true;
+    }
+
+    public async Task<PagedResult<EnrollmentModel>?> GetEnrollmentsByCourseIdAsync(int courseId, QueryParameters query)
+    {
+        var course = await _repository.GetByIdAsync(courseId);
+        if (course == null) return null;
+
+        var expandFields = query.Expand?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(e => e.Trim().ToLower()).ToList() ?? new List<string>();
+
+        IQueryable<Enrollment> q = _enrollmentRepository.GetAll().Where(e => e.CourseId == courseId);
+
+        if (expandFields.Contains("student"))
+            q = q.Include(e => e.Student);
+        if (expandFields.Contains("course"))
+            q = q.Include(e => e.Course).ThenInclude(c => c!.Semester);
+
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            var search = query.Search.ToLower();
+            q = q.Where(e => e.Status.ToLower().Contains(search)
+                          || (e.Student != null && e.Student.FullName.ToLower().Contains(search)));
+        }
+
+        var totalItems = await q.CountAsync();
+        q = ApplyEnrollmentSort(q, query.Sort);
+        q = q.Skip((query.Page - 1) * query.Size).Take(query.Size);
+
+        var entities = await q.ToListAsync();
+        var models = entities.Select(e => MapEnrollmentToModel(e, expandFields.Contains("student"), expandFields.Contains("course"))).ToList();
+
+        return new PagedResult<EnrollmentModel>
+        {
+            Items = models,
+            Pagination = new PaginationMetadata
+            {
+                Page = query.Page,
+                PageSize = query.Size,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)query.Size)
+            }
+        };
+    }
+
+    private static IQueryable<Enrollment> ApplyEnrollmentSort(IQueryable<Enrollment> query, string? sort)
+    {
+        if (string.IsNullOrWhiteSpace(sort))
+            return query.OrderBy(e => e.EnrollmentId);
+
+        var sortFields = sort.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        IOrderedQueryable<Enrollment>? ordered = null;
+
+        foreach (var field in sortFields)
+        {
+            var trimmed = field.Trim();
+            var descending = trimmed.StartsWith('-');
+            var propName = descending ? trimmed[1..] : trimmed;
+
+            ordered = propName.ToLower() switch
+            {
+                "enrolldate" => descending
+                    ? (ordered == null ? query.OrderByDescending(e => e.EnrollDate) : ordered.ThenByDescending(e => e.EnrollDate))
+                    : (ordered == null ? query.OrderBy(e => e.EnrollDate) : ordered.ThenBy(e => e.EnrollDate)),
+                "status" => descending
+                    ? (ordered == null ? query.OrderByDescending(e => e.Status) : ordered.ThenByDescending(e => e.Status))
+                    : (ordered == null ? query.OrderBy(e => e.Status) : ordered.ThenBy(e => e.Status)),
+                "enrollmentid" => descending
+                    ? (ordered == null ? query.OrderByDescending(e => e.EnrollmentId) : ordered.ThenByDescending(e => e.EnrollmentId))
+                    : (ordered == null ? query.OrderBy(e => e.EnrollmentId) : ordered.ThenBy(e => e.EnrollmentId)),
+                "studentid" => descending
+                    ? (ordered == null ? query.OrderByDescending(e => e.StudentId) : ordered.ThenByDescending(e => e.StudentId))
+                    : (ordered == null ? query.OrderBy(e => e.StudentId) : ordered.ThenBy(e => e.StudentId)),
+                _ => ordered ?? query.OrderBy(e => e.EnrollmentId)
+            };
+        }
+
+        return ordered ?? query.OrderBy(e => e.EnrollmentId);
+    }
+
+    private static EnrollmentModel MapEnrollmentToModel(Enrollment entity, bool includeStudent, bool includeCourse)
+    {
+        var model = new EnrollmentModel
+        {
+            EnrollmentId = entity.EnrollmentId,
+            StudentId = entity.StudentId,
+            CourseId = entity.CourseId,
+            EnrollDate = entity.EnrollDate,
+            Status = entity.Status
+        };
+
+        if (includeStudent && entity.Student != null)
+        {
+            model.Student = new StudentModel
+            {
+                StudentId = entity.Student.StudentId,
+                FullName = entity.Student.FullName,
+                Email = entity.Student.Email,
+                DateOfBirth = entity.Student.DateOfBirth
+            };
+        }
+
+        if (includeCourse && entity.Course != null)
+        {
+            model.Course = new CourseModel
+            {
+                CourseId = entity.Course.CourseId,
+                CourseName = entity.Course.CourseName,
+                SemesterId = entity.Course.SemesterId,
+                SubjectId = entity.Course.SubjectId,
+                Semester = entity.Course.Semester != null ? new SemesterModel
+                {
+                    SemesterId = entity.Course.Semester.SemesterId,
+                    SemesterName = entity.Course.Semester.SemesterName
+                } : null
+            };
+        }
+
+        return model;
     }
 
     private static IQueryable<Course> ApplySort(IQueryable<Course> query, string? sort)

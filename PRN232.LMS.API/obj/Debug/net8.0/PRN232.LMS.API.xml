@@ -29,6 +29,11 @@
             Delete a course
             </summary>
         </member>
+        <member name="M:PRN232.LMS.API.Controllers.CoursesController.GetEnrollments(System.Int32,System.String,System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Get enrollments for a specific course with search, sort, paging, field selection, and expansion
+            </summary>
+        </member>
         <member name="M:PRN232.LMS.API.Controllers.EnrollmentsController.GetById(System.Int32)">
             <summary>
             Get an enrollment by ID with related student and course

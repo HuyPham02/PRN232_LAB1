@@ -141,7 +141,6 @@ C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\staticwebas
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.L.4A733DBF.Up2Date
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.LMS.API.dll
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\refint\PRN232.LMS.API.dll
@@ -149,3 +148,4 @@ C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.LMS.
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.LMS.API.pdb
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.LMS.API.genruntimeconfig.cache
 C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\ref\PRN232.LMS.API.dll
+C:\Users\Acer\Downloads\LMS-Lab1\LMS\PRN232.LMS.API\obj\Debug\net8.0\PRN232.LMS.API.sourcelink.json
