@@ -26,7 +26,6 @@ public class StudentResponse
     public string FullName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
-    public List<EnrollmentResponse>? Enrollments { get; set; }
 }
 
 public class EnrollmentResponse
@@ -48,7 +47,6 @@ public class CourseResponse
     public int SubjectId { get; set; }
     public SemesterResponse? Semester { get; set; }
     public SubjectResponse? Subject { get; set; }
-    public List<EnrollmentResponse>? Enrollments { get; set; }
 }
 
 public class SemesterResponse
@@ -57,7 +55,6 @@ public class SemesterResponse
     public string SemesterName { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public List<CourseResponse>? Courses { get; set; }
 }
 
 public class SubjectResponse
@@ -66,7 +63,6 @@ public class SubjectResponse
     public string SubjectCode { get; set; } = string.Empty;
     public string SubjectName { get; set; } = string.Empty;
     public int Credit { get; set; }
-    public List<CourseResponse>? Courses { get; set; }
 }
 
 public class PagedResponse<T>

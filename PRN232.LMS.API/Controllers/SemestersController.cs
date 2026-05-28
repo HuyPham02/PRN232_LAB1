@@ -155,16 +155,7 @@ public class SemestersController : ControllerBase
             SemesterId = model.SemesterId,
             SemesterName = model.SemesterName,
             StartDate = model.StartDate,
-            EndDate = model.EndDate,
-            Courses = model.Courses?.Any() == true
-                ? model.Courses.Select(c => new CourseResponse
-                {
-                    CourseId = c.CourseId,
-                    CourseName = c.CourseName,
-                    SemesterId = c.SemesterId,
-                    SubjectId = c.SubjectId
-                }).ToList()
-                : null
+            EndDate = model.EndDate
         };
     }
 
@@ -175,7 +166,6 @@ public class SemestersController : ControllerBase
         if (fields.Contains("semestername")) dict["semesterName"] = item.SemesterName;
         if (fields.Contains("startdate")) dict["startDate"] = item.StartDate;
         if (fields.Contains("enddate")) dict["endDate"] = item.EndDate;
-        if (fields.Contains("courses")) dict["courses"] = item.Courses;
         return dict;
     }
 }

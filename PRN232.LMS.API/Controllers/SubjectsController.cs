@@ -155,16 +155,7 @@ public class SubjectsController : ControllerBase
             SubjectId = model.SubjectId,
             SubjectCode = model.SubjectCode,
             SubjectName = model.SubjectName,
-            Credit = model.Credit,
-            Courses = model.Courses?.Any() == true
-                ? model.Courses.Select(c => new CourseResponse
-                {
-                    CourseId = c.CourseId,
-                    CourseName = c.CourseName,
-                    SemesterId = c.SemesterId,
-                    SubjectId = c.SubjectId
-                }).ToList()
-                : null
+            Credit = model.Credit
         };
     }
 
@@ -175,7 +166,6 @@ public class SubjectsController : ControllerBase
         if (fields.Contains("subjectcode")) dict["subjectCode"] = item.SubjectCode;
         if (fields.Contains("subjectname")) dict["subjectName"] = item.SubjectName;
         if (fields.Contains("credit")) dict["credit"] = item.Credit;
-        if (fields.Contains("courses")) dict["courses"] = item.Courses;
         return dict;
     }
 }

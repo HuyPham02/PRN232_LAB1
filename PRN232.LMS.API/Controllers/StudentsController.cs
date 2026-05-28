@@ -180,24 +180,7 @@ public class StudentsController : ControllerBase
             StudentId = model.StudentId,
             FullName = model.FullName,
             Email = model.Email,
-            DateOfBirth = model.DateOfBirth,
-            Enrollments = model.Enrollments?.Any() == true
-                ? model.Enrollments.Select(e => new EnrollmentResponse
-                {
-                    EnrollmentId = e.EnrollmentId,
-                    StudentId = e.StudentId,
-                    CourseId = e.CourseId,
-                    EnrollDate = e.EnrollDate,
-                    Status = e.Status,
-                    Course = e.Course != null ? new CourseResponse
-                    {
-                        CourseId = e.Course.CourseId,
-                        CourseName = e.Course.CourseName,
-                        SemesterId = e.Course.SemesterId,
-                        SubjectId = e.Course.SubjectId
-                    } : null
-                }).ToList()
-                : null
+            DateOfBirth = model.DateOfBirth
         };
     }
 
@@ -208,7 +191,6 @@ public class StudentsController : ControllerBase
         if (fields.Contains("fullname")) dict["fullName"] = item.FullName;
         if (fields.Contains("email")) dict["email"] = item.Email;
         if (fields.Contains("dateofbirth")) dict["dateOfBirth"] = item.DateOfBirth;
-        if (fields.Contains("enrollments")) dict["enrollments"] = item.Enrollments;
         return dict;
     }
 }
